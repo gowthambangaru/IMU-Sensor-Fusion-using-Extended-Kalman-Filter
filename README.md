@@ -4,10 +4,9 @@ SensorStrengthWeaknessGyroscopeAccurate short-termDrifts over time due to biasAc
 Neither sensor alone is reliable. The EKF mathematically fuses both to produce an estimate that is accurate, drift-corrected, and robust to noise.
 
 System Architecture
-┌─────────────────────────────────────────────────────┐
+
 │                  IMU Simulator                       │
-│  True Trajectory → Gyroscope + Accelerometer + Noise│
-└────────────────────┬────────────────────────────────┘
+  True Trajectory → Gyroscope + Accelerometer + Noise
                      │
           ┌──────────▼──────────┐
           │   EKF Pipeline       │
