@@ -3,34 +3,6 @@ Any moving vehicle — satellite, rocket, or aircraft — must know its orientat
 SensorStrengthWeaknessGyroscopeAccurate short-termDrifts over time due to biasAccelerometerNo driftNoisy, sensitive to vibrations
 Neither sensor alone is reliable. The EKF mathematically fuses both to produce an estimate that is accurate, drift-corrected, and robust to noise.
 
-System Architecture
-
-│                  IMU Simulator                       │
-  True Trajectory → Gyroscope + Accelerometer + Noise
-                     │
-          ┌──────────▼──────────┐
-          │   EKF Pipeline       │
-          │                      │
-          │  ┌─────────────────┐ │
-          │  │  PREDICT STEP   │ │  ← Gyroscope (propagate state)
-          │  │  x = f(x, gyro) │ │
-          │  │  P = FPFᵀ + Q   │ │
-          │  └────────┬────────┘ │
-          │           │          │
-          │  ┌────────▼────────┐ │
-          │  │  UPDATE STEP    │ │  ← Accelerometer (correct state)
-          │  │  K = PH ͵(HPHᵀ+R)│ │
-          │  │  x = x + K·y   │ │
-          │  │  P = (I-KH)P   │ │
-          │  └────────┬────────┘ │
-          └───────────┼──────────┘
-                      │
-          ┌───────────▼──────────┐
-          │     Estimated         │
-          │  Roll, Pitch, Yaw     │
-          │  + Gyro Bias          │
-          └───────────────────────┘
-
 EKF State Vector
 x = [roll, pitch, yaw, bias_x, bias_y, bias_z]   (6 states)
 
@@ -69,15 +41,15 @@ Plot 1 — Angle Estimation: EKF vs Raw Gyro vs Ground Truth
 EKF closely tracks ground truth on Roll and Pitch while raw gyro integration visibly drifts.
 
 Plot 2 — Error Over Time
-Show Image
+
 Raw gyro error grows continuously due to bias drift. EKF error remains near zero throughout.
 
 Plot 3 — RMSE Comparison
-Show Image
+
 98%+ RMSE reduction on Roll and Pitch axes confirms EKF effectiveness.
 
 Plot 4 — Gyroscope Bias Estimation
-Show Image
+
 EKF simultaneously estimates and tracks the hidden gyroscope bias — a key feature for real inertial navigation systems.
 
 Noise Model Parameters
